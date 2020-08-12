@@ -24,3 +24,7 @@ A web application that helps you find the best recipe that uses ingredients in y
 3. Create recipes(not finish).
 
 Now you can make a dish by choose your favorite ingredients or by following the recipes.
+
+## License
+
+This project is licensed under the MIT license.
