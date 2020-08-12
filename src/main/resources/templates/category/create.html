@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-8 order-md-1">
+        <h4 class="mb-3">分類を追加</h4>
+        <form th:action="@{/category}" th:method="post" class="needs-validation" novalidate>
+            <input type="hidden" name="order" value="0">
+            <div class="mb-3">
+                <label for="name">名称</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="豚肉">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="parent">親分類</label>
+                    <select class="custom-select" id="parent" name="parent.id">
+                        <option value="" selected disabled>分類を選択...</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">ストック</button>
+        </form>
+    </div>
+</div>
+<script th:fragment="js"></script>
+</html>

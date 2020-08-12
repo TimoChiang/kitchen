@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-8 order-md-1">
+        <h4 class="mb-3">お手元の食材を追加</h4>
+        <form th:action="@{/user/ingredient}" th:method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="name">名称</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="食パン">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="category">分類</label>
+                    <select class="custom-select" id="category" name="category.id">
+                        <option value="" selected disabled>分類を選択...</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="quantity">数量</label>
+                    <input type="number" min="0" class="form-control" id="quantity" name="quantity" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="unit">単位</label>
+                    <select class="custom-select" id="unit" name="unit">
+                        <option selected disabled>単位を選択...</option>
+                        <option th:each="unit : ${units}" th:value="${unit.name()}" th:text="${unit.toString()}"></option>
+                    </select>
+<!--                    <input type="number" min="0" class="form-control" id="unit" name="unit" placeholder="" value="" required>-->
+                    <div class="invalid-feedback">
+                        Valid first name is required.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="expiredAt">賞味期限、消費期限</label>
+                    <input type="date" class="form-control" id="expiredAt" name="expiredAt" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">ストック</button>
+        </form>
+    </div>
+    <div class="col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">現在の食材</span>
+        </h4>
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed" th:each="ingredient : ${ingredients}">
+                <div>
+                    <h6 class="my-0" th:text="${ingredient.name}">name</h6>
+                    <small class="text-muted" th:text="${ingredient.expiredAt}">expiredAt</small>
+                </div>
+                <span class="text-muted" th:text="${ingredient.quantity}">1</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<script th:fragment="js">
+    $('#category').combobox({
+
+        // Bootstrap version
+        bsVersion: '4',
+
+        // Default templates
+        menu: '<ul class="typeahead typeahead-long dropdown-menu"></ul>',
+        item: '<li><a href="#" class="dropdown-item"></a></li>',
+
+        // Custom function with one item argument that compares the item to the input.
+        matcher: null,
+
+        // Custom function that sorts a list items for display in the dropdown
+        sorter: null,
+
+        // Custom function for highlighting an item.
+        highlighter: null,
+
+        // Custom function that returns markup for the combobox.
+        template: null,
+
+        // The desired id of the transformed combobox.
+        appendId: null,
+
+        // The maximum number of suggestions to render on the screen at one time.
+        renderLimit: -1,
+
+        // Clears contents when unfocusing if a matching option is not selected
+        clearIfNoMatch: true,
+
+        // Custom icon font class
+        iconCaret: undefined,
+        iconRemove: undefined
+
+    })
+</script>
+</html>

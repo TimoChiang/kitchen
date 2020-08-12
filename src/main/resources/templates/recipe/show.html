@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-12">
+<!--        <form th:action="@{/user/dish/recipe/{id}(id=${recipe.id})}" th:method="post" class="needs-validation" novalidate>-->
+        <form th:action="@{/user/dish}" th:method="post" class="needs-validation" novalidate>
+            <input type="hidden" name="name" th:value="${recipe.name}">
+            <div class="row">
+            <div class="col-md-12 mb-12">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h4 class="mb-3" th:text="${recipe.name} + ' レシピの詳細'"></h4>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <a class="btn btn-sm btn-outline-secondary" role="button" th:text="一覧に戻る" th:href="@{/recipe}">Link</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="scheduleDate">作成日</label>
+                    <input type="date" class="form-control" id="scheduleDate" name="scheduleDate" placeholder="" value="" required>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="scheduleTime">作成時間</label>
+                    <select class="custom-select" id="scheduleTime" name="scheduleTime">
+                        <option selected disabled>時間を選択...</option>
+                        <option th:each="time:${#numbers.sequence(0,24)}" th:value="${time}" th:text="${time}"></option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th style="width: 30%" scope="col">材料</th>
+                        <th style="width: 15%" scope="col">数量</th>
+                        <th style="width: 5%" scope="col">使う</th>
+                        <th style="width: 35%" scope="col">手元材料</th>
+                        <th style="width: 15%" scope="col">数量</th>
+                        <!--                <th scope="col">Handle</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <div th:remove="tag" th:each="ingredient : ${recipe.getIngredients()}"
+                         th:with="uiCount=${ingredient.getUserIngredients().size()}, ui=${ingredient.getUserIngredients()}, formName=${'ingredients[0].'}">
+                        <tr>
+                            <td th:text="${ingredient.name}" th:rowspan="${uiCount}">name</td>
+                            <td th:text="${ingredient.quantity} + ' ' + ${ingredient.unit.toString()}" th:rowspan="${uiCount}">quantity</td>
+                            <td><input type="checkbox" th:name="${formName} + 'userIngredientId'" th:value="${ui.get(0).id}" th:if="${uiCount>0}"></td>
+                            <td th:text="${uiCount>0}?${ui.get(0).name}:''"></td>
+                            <td>
+                                <input type="number" min="0" th:max="${ui.get(0).quantity}" th:value="${ui.get(0).quantity}" th:name="${formName} + 'quantity'" th:if="${uiCount>0}">
+                                <span th:text="${ui.get(0).unit}" th:if="${uiCount>0}">g</span>
+                            </td>
+                        </tr>
+                        <tr th:each="i, stat : ${ui}" th:if="${!stat.first}" th:object="${i}">
+                            <td><input type="checkbox" th:name="${formName} + 'userIngredientId'" th:value="*{id}"></td>
+                            <td th:text="*{name}"></td>
+                            <td>
+                                <input type="number" min="0" th:max="*{quantity}" th:value="*{quantity}" th:name="${formName} + 'quantity'">
+                                <span th:text="*{unit}">g</span>
+                            </td>
+                        </tr>
+                    </div>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-primary btn-lg btn-block" type="submit">料理を作成！</button>
+            </div>
+        </div>
+        </form>
+    </div>
+
+
+
+</div>
+<script th:fragment="js">
+    let index = 0;
+    $("input[name='ingredients[0].userIngredientId']").closest("tr").each(function() {
+        tr = $(this);
+        tr.find("input[name^='ingredients[0]']").each(function() {
+            var newName = $(this).attr('name').replace(/^(ingredients\[)\d+(\].+)$/, '$1' + index + '$2');
+            $(this).attr('name', newName);
+        });
+        index++;
+    });
+</script>
+</html>

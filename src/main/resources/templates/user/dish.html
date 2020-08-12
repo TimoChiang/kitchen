@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+    <div class="row" th:fragment="content">
+        <div class="col-md-8 order-md-1">
+            <h4 class="mb-3">料理を追加</h4>
+            <form th:action="@{/user/dish}" th:method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name">名称</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="食パン">
+                    <div class="invalid-feedback">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="scheduleDate">作成日</label>
+                        <input type="date" class="form-control" id="scheduleDate" name="scheduleDate" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            Valid last name is required.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="scheduleTime">作成時間</label>
+                        <select class="custom-select" id="scheduleTime" name="scheduleTime">
+                            <option selected disabled>時間を選択...</option>
+                            <option th:each="time:${#numbers.sequence(0,24)}" th:value="${time}" th:text="${time}"></option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Valid last name is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label for="price">材料</label>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                            追加
+                        </button>
+                        <table id="use_ingredients_table" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">材料</th>
+                                <th scope="col">量</th>
+                                <th scope="col">削除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+<!--                            <tr>-->
+
+<!--                                <td>demo<input type="text" value="香蕉" name="ingredients[0].name"></td>-->
+<!--                                <td><input type="number" value="1" name="ingredients[0].quantity"></td>-->
+<!--                                <td><button type="button" class="btn btn-danger btn-sm">削除</button>-->
+<!--                                    <input type="hidden" value="2" name="ingredients[0].userIngredientId">-->
+<!--                                    <input type="hidden" value="1" name="ingredients[0].unitId">-->
+<!--                                </td>-->
+<!--                            </tr><tr>-->
+<!--                                <td>demo<input type="text" value="apple" name="ingredients[1].name"></td>-->
+<!--                                <td><input type="number" value="100" name="ingredients[1].quantity"></td>-->
+<!--                                <td><button type="button" class="btn btn-danger btn-sm">削除</button>-->
+<!--                                    <input type="hidden" value="1" name="ingredients[1].userIngredientId">-->
+<!--                                    <input type="hidden" value="2" name="ingredients[1].unitId">-->
+<!--                                </td>-->
+<!--                            </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">ストック</button>
+            </form>
+        </div>
+        <div class="col-md-4 order-md-2 mb-4" th:each="dish : ${dishes}">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted" th:text="${{dish.name}}">Your cart</span>
+                <span class="badge badge-secondary badge-pill">3</span>
+            </h4>
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between lh-condensed" th:each="ingredient : ${dish.ingredients}">
+                    <div>
+                        <h6 class="my-0" th:text="${{ingredient.name}}">Product name</h6>
+                        <small class="text-muted">Brief description</small>
+                    </div>
+                    <span class="text-muted">$12</span>
+                </li>
+            </ul>
+        </div>
+        <!-- Modal -->
+        <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="select_ingredients_table" class="table table-sm table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">材料</th>
+                                <th scope="col">残り分</th>
+                                <th scope="col">期限（賞味、消費）</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="ingredient : ${ingredients}">
+                                <th scope="row">
+                                    <div class="form-check">
+                                        <input th:value="${ingredient.id}" class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1">
+                                    </div>
+                                </th>
+                                <td th:text="${ingredient.name}"></td>
+                                <td><span th:text="${ingredient.quantity}">1</span>  <span th:text="${ingredient.unit}">g</span></td>
+                                <td th:text="${ingredient.expiredAt}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                        <button type="button" id="add_ingredients" class="btn btn-primary">追加</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:fragment="js">
+        // ingredients input index
+        let ingredient_count = 0;
+        $("#add_ingredients").click(function() {
+            html = "";
+            $('#select_ingredients_table input:checked').not(":disabled").each(function() {
+                row = $(this).closest('tr');
+                qty = row.find('td:nth-child(3) span:nth-child(1)').text();
+                html +="<tr>\n" +
+                    "<td>"+ row.find('td:nth-child(2)').text() +"<input type=\"hidden\" value=\""+row.find('td:nth-child(2)').text()+"\" name=\"ingredients["+ ingredient_count +"].name\"></td>\n" +
+                    "<td><input type='number' min='0' max='"+qty+"' value="+ qty +" name=\"ingredients["+ ingredient_count +"].quantity\"> "+ row.find('td:nth-child(3) span:nth-child(2)').text() +"</td>\n" +
+                    "<td><button type=\"button\" class=\"btn btn-danger btn-sm delete_ingredient\">削除</button><input type=\"hidden\" value=\""+ $(this).val() +"\" name=\"ingredients["+ ingredient_count +"].userIngredientId\"></td>\n" +
+                    "</tr>"
+                ingredient_count++;
+                $(this).attr("disabled", true);
+            });
+
+            $("#use_ingredients_table tbody").append(html);
+            $('#exampleModal').modal('hide');
+        });
+
+        $(document).on("click",".delete_ingredient",function() {
+            console.log($(this).next("input:hidden").val());
+            console.log($('#select_ingredients_table input:checked[value='+ $(this).next("input:hidden").val() +']'));
+            $('#select_ingredients_table input:checked[value='+ $(this).next("input:hidden").val() +']').prop('checked', false).attr("disabled", false);
+            $(this).closest("tr").remove();
+        });
+
+    </script>
+</html>

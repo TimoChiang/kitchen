@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-8 order-md-1">
+        <h4 class="mb-3" th:text="${category.name} + ' 分類を編集'"></h4>
+        <form th:action="@{/category/{id}(id=${category.id})}" th:method="put" class="needs-validation" novalidate th:object="${category}">
+            <input type="hidden" name="order" value="0">
+            <div class="mb-3">
+                <label for="name">名称</label>
+                <input type="text" class="form-control" th:field="*{name}">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="parent">親分類</label>
+                    <select class="custom-select" id="parent" name="parent.id">
+                        <option value="">なし</option>
+                        <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}" th:selected="*{parent} ? (${c.id} == *{parent.id}) : (false)"></option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Valid last name is required.
+                    </div>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">ストック</button>
+        </form>
+    </div>
+</div>
+<script th:fragment="js"></script>
+</html>

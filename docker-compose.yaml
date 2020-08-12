@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_DATABASE=kitchen
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./db-data:/var/lib/mysql
