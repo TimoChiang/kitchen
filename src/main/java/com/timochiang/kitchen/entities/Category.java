@@ -2,6 +2,7 @@ package com.timochiang.kitchen.entities;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,6 +41,10 @@ public class Category {
     @Column(columnDefinition="DATETIME")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "category")
+    @Where(clause = "quantity > 0")
+    private List<UserIngredient> userIngredients;
 
     public Integer getId() {
         return id;
@@ -80,5 +85,13 @@ public class Category {
 
     public void setOrder(Integer order) {
         this.order = order;
+    }
+
+    public List<UserIngredient> getUserIngredients() {
+        return userIngredients;
+    }
+
+    public void setUserIngredients(List<UserIngredient> userIngredients) {
+        this.userIngredients = userIngredients;
     }
 }

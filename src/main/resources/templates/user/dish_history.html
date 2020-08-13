@@ -6,11 +6,13 @@
             <thead>
             <tr>
                 <th scope="col">名称</th>
+                <th scope="col">作成日時</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="dish : ${dishs}">
                 <td th:text="${dish.name}">name</td>
+                <td th:text="${dish.scheduleDateTime}">datetime</td>
             </tr>
             </tbody>
         </table>

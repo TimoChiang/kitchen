@@ -14,7 +14,7 @@
         }
 
         .dropdown-menu{
-            height:200px;
+            /*height:200px;*/
             overflow-y:auto;
         }
 
@@ -38,8 +38,12 @@
             <li class="nav-item" th:classappend="${#request.requestURI == '/user/dish/history' ? 'active':''}">
                 <a class="nav-link" th:href="@{/user/dish/history}">料理履歴 </a>
             </li>
-            <li class="nav-item" th:classappend="${#request.requestURI == '/recipe' ? 'active':''}">
-                <a class="nav-link" th:href="@{/recipe}">レシピを見る </a>
+            <li class="nav-item dropdown" th:classappend="${#request.requestURI.startsWith('/recipe') ? 'active':''}">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="レシピ">Settings</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" th:text="一覧" th:href="@{/recipe}" th:classappend="${#request.requestURI == '/recipe' ? 'active':''}">Action</a>
+                    <a class="dropdown-item" th:text="作成" th:href="@{/recipe/create}" th:classappend="${#request.requestURI == '/recipe/create' ? 'active':''}">Another action</a>
+                </div>
             </li>
             <li class="nav-item" th:classappend="${#request.requestURI == '/category' ? 'active':''}">
                 <a class="nav-link" th:href="@{/category}">食材分類一覧 </a>

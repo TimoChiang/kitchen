@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-12 order-md-1">
+        <h4 class="mb-3">レシピを追加</h4>
+        <form th:action="@{/recipe/create}" th:method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="name">名称</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="">
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description">説明</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                <div class="invalid-feedback">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label for="price">材料</label>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-sm">
+                        追加
+                    </button>
+                    <table id="use_ingredients_table" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">分類</th>
+                            <th scope="col">材料名</th>
+                            <th scope="col">量</th>
+                            <th scope="col">単位</th>
+                            <th scope="col">削除</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="i: ${#numbers.sequence(0, 6)}" th:with="alias=${'ingredients[' + i + '].'}">
+                                <td>
+                                    <select class="custom-select category" th:name="${alias + 'category.id'}">
+                                        <option value="" selected disabled>分類を選択...</option>
+                                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" value="" th:name="${alias + 'name'}">
+                                </td>
+                                <td>
+                                    <input type="number" value="" th:name="${alias + 'quantity'}">
+                                </td>
+                                <td>
+                                    <select class="custom-select" th:name="${alias + 'unit'}">
+                                        <option selected disabled>単位を選択...</option>
+                                        <option th:each="unit : ${units}" th:value="${unit.name()}" th:text="${unit.toString()}"></option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm">削除</button>
+                                </td>
+                            </tr>
+                                                    <!--<tr>
+                                                                                  <td>demo<input type="text" value="apple" name="ingredients[1].name"></td>-->
+                        <!--                                <td><input type="number" value="100" name="ingredients[1].quantity"></td>-->
+                        <!--                                <td><button type="button" class="btn btn-danger btn-sm">削除</button>-->
+                        <!--                                    <input type="hidden" value="1" name="ingredients[1].userIngredientId">-->
+                        <!--                                    <input type="hidden" value="2" name="ingredients[1].unitId">-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">ストック</button>
+        </form>
+    </div>
+</div>
+<script th:fragment="js">
+    $('.category').combobox({
+
+        // Bootstrap version
+        bsVersion: '4',
+
+        // Default templates
+        menu: '<ul class="typeahead typeahead-long dropdown-menu"></ul>',
+        item: '<li><a href="#" class="dropdown-item"></a></li>',
+
+        // Custom function with one item argument that compares the item to the input.
+        matcher: null,
+
+        // Custom function that sorts a list items for display in the dropdown
+        sorter: null,
+
+        // Custom function for highlighting an item.
+        highlighter: null,
+
+        // Custom function that returns markup for the combobox.
+        template: null,
+
+        // The desired id of the transformed combobox.
+        appendId: null,
+
+        // The maximum number of suggestions to render on the screen at one time.
+        renderLimit: -1,
+
+        // Clears contents when unfocusing if a matching option is not selected
+        clearIfNoMatch: true,
+
+        // Custom icon font class
+        iconCaret: undefined,
+        iconRemove: undefined
+
+    })
+</script>
+</html>

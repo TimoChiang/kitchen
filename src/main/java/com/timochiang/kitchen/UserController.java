@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping("/dish")
     public String createDish(Dish dish) {
         userService.createDish(dish);
-        return "redirect:/user/dish";
+        return "redirect:/user/dish/history";
     }
 
     @GetMapping("/dish/history")

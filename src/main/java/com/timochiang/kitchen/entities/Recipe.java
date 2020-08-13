@@ -1,8 +1,6 @@
 package com.timochiang.kitchen.entities;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -12,7 +10,7 @@ import java.util.List;
 @Entity
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -63,6 +61,4 @@ public class Recipe {
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
     }
-
-
 }

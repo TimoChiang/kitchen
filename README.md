@@ -21,7 +21,7 @@ A web application that helps you find the best recipe that uses ingredients in y
 ## How To use
 1. Create categories for ingredients.
 2. Create your ingredients.
-3. Create recipes(not finish).
+3. Create recipes.
 
 Now you can make a dish by choose your favorite ingredients or by following the recipes.
 
