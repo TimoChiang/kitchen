@@ -29,8 +29,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item" th:classappend="${#request.requestURI == '/user/ingredient' ? 'active':''}">
-                <a class="nav-link" th:href="@{/user/ingredient}">食材追加、一覧 </a>
+            <li class="nav-item dropdown" th:classappend="${#request.requestURI.startsWith('/user/ingredient') ? 'active':''}">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="食材">Settings</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" th:text="食材追加と一覧" th:href="@{/user/ingredient}" th:classappend="${#request.requestURI == '/user/ingredient' ? 'active':''}">Action</a>
+                    <a class="dropdown-item" th:text="写真から食材を追加" th:href="@{/user/ingredient/receipt}" th:classappend="${#request.requestURI == '/user/ingredient/receipt' ? 'active':''}">Another action</a>
+                </div>
             </li>
             <li class="nav-item" th:classappend="${#request.requestURI == '/user/dish' ? 'active':''}">
                 <a class="nav-link" th:href="@{/user/dish}">料理を作る </a>
@@ -39,8 +43,8 @@
                 <a class="nav-link" th:href="@{/user/dish/history}">料理履歴 </a>
             </li>
             <li class="nav-item dropdown" th:classappend="${#request.requestURI.startsWith('/recipe') ? 'active':''}">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="レシピ">Settings</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="レシピ">Settings</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown02">
                     <a class="dropdown-item" th:text="一覧" th:href="@{/recipe}" th:classappend="${#request.requestURI == '/recipe' ? 'active':''}">Action</a>
                     <a class="dropdown-item" th:text="作成" th:href="@{/recipe/create}" th:classappend="${#request.requestURI == '/recipe/create' ? 'active':''}">Another action</a>
                 </div>
