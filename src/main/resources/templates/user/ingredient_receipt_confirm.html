@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-12 order-md-1">
+        <div class="alert alert-success" role="alert">
+            写真をスキャンしました。
+        </div>
+        <h4 class="mb-3">レシートから食材を確認</h4>
+        <form th:action="@{/user/ingredient/bulk}" th:method="post" class="needs-validation" novalidate>
+            <div class="card mb-3" th:each="ingredient, stat: ${ingredients}" th:with="alias=${'ingredients[' + stat.index + '].'}">
+                <h5 class="card-header" th:text="${ '#' + stat.count}">#1</h5>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label th:for="${'name_'+ stat.count}">名称</label>
+                        <input type="text" class="form-control" th:id="${'name_'+ stat.count}" th:name="${alias + 'name'}" th:value="${ingredient.name}">
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label th:for="${'category_'+ stat.count}">分類</label>
+                            <select class="custom-select category" th:id="${'category_'+ stat.count}" th:name="${alias + 'category.id'}">
+                                <option value="" selected disabled>分類を選択...</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label th:for="${'quantity_'+ stat.count}">数量</label>
+                            <input type="number" min="0" class="form-control" th:id="${'quantity_'+ stat.count}" th:name="${alias + 'quantity'}" th:value="${ingredient.quantity}" required>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label th:for="${'unit_'+ stat.count}">単位</label>
+                            <select class="custom-select" th:id="${'unit_'+ stat.count}" th:name="${alias + 'unit'}">
+                                <option selected disabled>単位を選択...</option>
+                                <option th:each="unit : ${units}" th:value="${unit.name()}" th:text="${unit.toString()}"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="${'expiredAt_'+ stat.count}">賞味期限、消費期限</label>
+                        <input type="date" class="form-control" th:id="${'expiredAt_'+ stat.count}" id="expiredAt" th:name="${alias + 'expiredAt'}">
+                        <div class="invalid-feedback">
+                            Valid last name is required.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" type="submit">アップロード</button>
+        </form>
+    </div>
+</div>
+<script th:fragment="js">
+
+</script>
+</html>
