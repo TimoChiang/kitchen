@@ -1,13 +1,11 @@
 package com.timochiang.kitchen.entities;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @MappedSuperclass
 public class AbstractIngredient implements Serializable {
@@ -23,16 +21,17 @@ public class AbstractIngredient implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "DOUBLE(6,2) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(6,2) UNSIGNED", precision=6, scale=2)
     private Double quantity;
 
     @Enumerated(EnumType.STRING)
     private Unit unit;
 
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false, columnDefinition="DATETIME")
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Column(columnDefinition="DATETIME")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
