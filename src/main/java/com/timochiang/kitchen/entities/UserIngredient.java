@@ -13,7 +13,7 @@ import java.util.Date;
 @Entity
 public class UserIngredient extends AbstractIngredient {
 
-    @Column(nullable = false, columnDefinition = "DOUBLE(6,2) UNSIGNED")
+    @Column(nullable = false, columnDefinition = "DECIMAL(6,2) UNSIGNED", precision=6, scale=2)
     private Double originalQuantity;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd",timezone="GMT+9")

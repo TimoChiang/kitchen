@@ -4,7 +4,7 @@ A web application that helps you find the best recipe that uses ingredients in y
 
 ## Technologies
 - Java 11
-- [Spring Boot](https://spring.io/projects/spring-boot) (with Gradle)
+- [Spring Boot](https://spring.io/projects/spring-boot) 2.3.1 (with Gradle)
 - Spring Data JPA
 - MySQL 5.7
 - [Thymeleaf](https://www.thymeleaf.org/)
