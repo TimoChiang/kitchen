@@ -59,6 +59,9 @@ public class Recipe {
     }
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
+        for (RecipeIngredient ingredient : ingredients) {
+            ingredient.setRecipe(this);
+        }
         this.ingredients = ingredients;
     }
 }
