@@ -10,6 +10,7 @@ A web application that helps you find the best recipe that uses ingredients in y
 - [Thymeleaf](https://www.thymeleaf.org/)
 - [Bootstrap](https://getbootstrap.com/) 4.5 & jQuery
 - Docker (For MySQL envirnoment)
+- [DbSetup](http://dbsetup.ninja-squad.com) 2.1.0 (For testing)
 
 ## How to run
 1. Clone this repository / Import this repository in your IDE. 
