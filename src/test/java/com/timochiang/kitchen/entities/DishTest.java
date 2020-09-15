@@ -1,9 +1,5 @@
-package com.timochiang.kitchen;
+package com.timochiang.kitchen.entities;
 
-import com.timochiang.kitchen.entities.Category;
-import com.timochiang.kitchen.entities.Dish;
-import com.timochiang.kitchen.entities.DishIngredient;
-import com.timochiang.kitchen.entities.Unit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
