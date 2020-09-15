@@ -41,10 +41,10 @@ public class RecipeRepositoryTest {
                                 .build(),
                         insertInto("recipe_ingredient")
                                 .columns("category_id", "name", "quantity", "recipe_id")
-                                .values(2, "pork", 1.0, 10)
-                                .values(2, "pork", 5.0, 11)
-                                .values(2, "pork", 1.0, 12)
-                                .values(3, "spinach", 100.0, 12)
+                                .values(102, "pork", 1.0, 10)
+                                .values(102, "pork", 5.0, 11)
+                                .values(102, "pork", 1.0, 12)
+                                .values(103, "spinach", 100.0, 12)
                                 .build());
         DbSetup dbSetup = new DbSetup(new DataSourceDestination(dataSource), operation);
         dbSetup.launch();

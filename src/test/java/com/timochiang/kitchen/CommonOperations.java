@@ -9,13 +9,13 @@ public class CommonOperations {
             sequenceOf(
                     insertInto("category")
                             .columns("id", "name", "parent_id", "children_order")
-                            .values(1, "Parent Category", null, null)
-                            .values(2, "Children Category 1", 1, 0)
-                            .values(3, "Children Category 2", 1, 1)
+                            .values(101, "Parent Category", null, null)
+                            .values(102, "Children Category 1", 101, 0)
+                            .values(103, "Children Category 2", 101, 1)
                             .build(),
                     insertInto("user_ingredient")
                             .columns("category_id", "name", "quantity", "original_quantity")
-                            .values(2, "good pork", 1.0, 1.0)
-                            .values(3, "fresh spinach" , 300.0, 300.0)
+                            .values(102, "good pork", 1.0, 1.0)
+                            .values(103, "fresh spinach" , 300.0, 300.0)
                             .build());
 }
