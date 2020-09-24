@@ -11,10 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +25,6 @@ public class CategoryServiceTest {
     private CategoryRepository categoryRepository;
 
     private Category parent;
-    private Category child1;
     private Category child2;
     private List<Category> categories;
 
@@ -37,7 +33,7 @@ public class CategoryServiceTest {
         parent = new Category();
         parent.setId(1);
         parent.setName("first category");
-        child1 = new Category();
+        Category child1 = new Category();
         child1.setId(2);
         child1.setName("second category");
         child1.setOrder(0);
@@ -48,10 +44,7 @@ public class CategoryServiceTest {
         child2.setOrder(1);
         child2.setParent(parent);
 
-        categories = new ArrayList<>();
-        categories.add(parent);
-        categories.add(child1);
-        categories.add(child2);
+        categories = new ArrayList<>(Arrays.asList(parent, child1, child1));
 
         // mock prepare
         Mockito.when(categoryRepository.findAll()).thenReturn(categories);
