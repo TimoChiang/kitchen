@@ -43,15 +43,18 @@ public class UserService {
     public Dish createDish(Dish dish) {
         // for safely remove null ingredients
         Iterator<DishIngredient> i = dish.getIngredients().iterator();
-        int totalPrice = 0;
         while (i.hasNext()) {
             DishIngredient ingredient = i.next(); // must be called before you can call i.remove()
-            if (ingredient.getUserIngredientId() != null && ingredient.getQuantity() != null) {
+            if (ingredient.getUserIngredientId() != null && ingredient.getQuantity() != null && ingredient.getQuantity() > 0) {
                 UserIngredient userIngredient = this.findIngredientById(ingredient.getUserIngredientId());
-                if (ingredient.getQuantity() > 0 && ingredient.getQuantity() <= userIngredient.getQuantity()) {
+                if (ingredient.getQuantity() <= userIngredient.getQuantity()) {
                     userIngredient.setQuantity(userIngredient.getQuantity() - ingredient.getQuantity());
-                    this.saveIngredient(userIngredient);
+                } else {
+                    // maximum quantity follows user ingredient's maximum quantity
+                    ingredient.setQuantity(userIngredient.getQuantity());
+                    userIngredient.setQuantity(0.0);
                 }
+                this.saveIngredient(userIngredient);
                 this.setDataFromIngredient(ingredient, userIngredient);
                 ingredient.setDish(dish);
             } else {
@@ -61,7 +64,7 @@ public class UserService {
         return this.saveDish(dish);
     }
 
-    public void setDataFromIngredient(DishIngredient i, UserIngredient a) {
+    private void setDataFromIngredient(DishIngredient i, UserIngredient a) {
         i.setName(a.getName());
         i.setUnit(a.getUnit());
         i.setCategory(a.getCategory());
