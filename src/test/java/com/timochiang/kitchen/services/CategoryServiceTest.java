@@ -44,7 +44,7 @@ public class CategoryServiceTest {
         child2.setOrder(1);
         child2.setParent(parent);
 
-        categories = new ArrayList<>(Arrays.asList(parent, child1, child1));
+        categories = new ArrayList<>(Arrays.asList(parent, child1, child2));
 
         // mock prepare
         Mockito.when(categoryRepository.findAll()).thenReturn(categories);

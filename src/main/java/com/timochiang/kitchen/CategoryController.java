@@ -48,9 +48,4 @@ public class CategoryController {
         model.addAttribute("categories", categoryService.findAll());
         return "category/edit";
     }
-
-    @PutMapping("")
-    public String update(Model model) {
-        return "create";
-    }
 }
