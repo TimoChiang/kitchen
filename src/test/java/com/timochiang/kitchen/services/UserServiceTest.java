@@ -193,7 +193,7 @@ public class UserServiceTest {
     public void uploadReceipt() throws IOException {
         String mockResponseString = "[{\"name\":\"キッコーマンエンブンヒカエメショウユ\",\"quantity\":1,\"price\":255,\"discount\":0},{\"name\":\"バナメイムキエヒ\",\"quantity\":1,\"price\":279,\"discount\":8},{\"name\":\"ヤマザキ ショウジュン8マイ\",\"quantity\":1,\"price\":78,\"discount\":3},{\"name\":\"コンドウキュウニュウ1000ml\",\"quantity\":2,\"price\":318,\"discount\":0},{\"name\":\"コクサンワカトリムネニク\",\"quantity\":1,\"price\":149,\"discount\":0},{\"name\":\"ニチレイブロッコリー250g\",\"quantity\":1,\"price\":152,\"discount\":0},{\"name\":\"メキシコサンブタモモキリオトシ\",\"quantity\":1,\"price\":401,\"discount\":120}]";
         Mockito.when(restTemplate.postForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any()))
-          .thenReturn(new ResponseEntity(mockResponseString, HttpStatus.OK));
+          .thenReturn(new ResponseEntity<>(mockResponseString, HttpStatus.OK));
         List<Product> pds = userService.uploadReceipt(file);
         assertThat(pds.size()).isEqualTo(7);
     }
