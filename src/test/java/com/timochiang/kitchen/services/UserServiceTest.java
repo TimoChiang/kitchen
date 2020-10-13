@@ -3,15 +3,23 @@ package com.timochiang.kitchen.services;
 import com.timochiang.kitchen.entities.*;
 import com.timochiang.kitchen.repositories.DishRepository;
 import com.timochiang.kitchen.repositories.UserIngredientRepository;
+import com.timochiang.kitchen.utils.json.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,14 +35,17 @@ public class UserServiceTest {
     private UserIngredientRepository userIngredientRepository;
     @MockBean
     private DishRepository dishRepository;
+    @MockBean
+    private RestTemplate restTemplate;
 
     private final UserIngredient ui1 = new UserIngredient();
     private List<UserIngredient> userIngredients;
     private final Dish dish1 = new Dish();
     private List<Dish> dishes;
+    private MockMultipartFile file;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         Category c1 = new Category();
         c1.setId(1);
         c1.setName("cat1");
@@ -101,6 +112,9 @@ public class UserServiceTest {
         di5.setQuantity(100.0);
         di5.setUserIngredientId(ui3.getId());
         dish1.setIngredients(new ArrayList<>(Arrays.asList(di1, di2, di3, di4, di5)));
+
+        FileInputStream inputStream = new FileInputStream("src/test/resources/files/test.jpg");
+        file = new MockMultipartFile("receipt_image", "test.jpg", "image/jpg", inputStream);
 
         // mock prepare
         Mockito.when(userIngredientRepository.findAll()).thenReturn(userIngredients);
@@ -173,5 +187,14 @@ public class UserServiceTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void uploadReceipt() throws IOException {
+        String mockResponseString = "[{\"name\":\"キッコーマンエンブンヒカエメショウユ\",\"quantity\":1,\"price\":255,\"discount\":0},{\"name\":\"バナメイムキエヒ\",\"quantity\":1,\"price\":279,\"discount\":8},{\"name\":\"ヤマザキ ショウジュン8マイ\",\"quantity\":1,\"price\":78,\"discount\":3},{\"name\":\"コンドウキュウニュウ1000ml\",\"quantity\":2,\"price\":318,\"discount\":0},{\"name\":\"コクサンワカトリムネニク\",\"quantity\":1,\"price\":149,\"discount\":0},{\"name\":\"ニチレイブロッコリー250g\",\"quantity\":1,\"price\":152,\"discount\":0},{\"name\":\"メキシコサンブタモモキリオトシ\",\"quantity\":1,\"price\":401,\"discount\":120}]";
+        Mockito.when(restTemplate.postForEntity(ArgumentMatchers.anyString(), ArgumentMatchers.any(), ArgumentMatchers.<Class<String>>any()))
+          .thenReturn(new ResponseEntity<>(mockResponseString, HttpStatus.OK));
+        List<Product> pds = userService.uploadReceipt(file);
+        assertThat(pds.size()).isEqualTo(7);
     }
 }

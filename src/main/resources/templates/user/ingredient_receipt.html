@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="layouts/default">
+<div class="row" th:fragment="content">
+    <div class="col-md-12 order-md-1">
+        <div class="alert alert-danger" role="alert" th:text="${errorMessage}" th:if="${errorMessage}">
+            A simple success alert—check it out!
+        </div>
+        <h4 class="mb-3">写真から食材を追加</h4>
+        <form th:action="@{/user/ingredient/receipt}" th:method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="receipt_image">レシート写真</label>
+                    <input type="file" class="form-control-file" id="receipt_image" name="receipt_image">
+                </div>
+            </div>
+            <hr class="mb-4">
+            <button class="btn btn-primary" id="btnSubmit" type="submit">アップロード</button>
+        </form>
+    </div>
+</div>
+<script th:fragment="js">
+    $( "form" ).submit(function( event ) {
+        btn = $("#btnSubmit");
+        btn.prop("disabled", true);
+        // add spinner to button
+        btn.html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> アップロード中...`
+        );
+        this.submit();
+    });
+</script>
+</html>
