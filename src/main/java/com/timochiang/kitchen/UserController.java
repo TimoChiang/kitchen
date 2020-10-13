@@ -1,21 +1,23 @@
 package com.timochiang.kitchen;
 
-import com.timochiang.kitchen.utils.json.Product;
 import com.timochiang.kitchen.entities.Dish;
 import com.timochiang.kitchen.entities.Unit;
 import com.timochiang.kitchen.entities.UserIngredient;
-import com.timochiang.kitchen.utils.dto.UserIngredientDto;
 import com.timochiang.kitchen.services.CategoryService;
 import com.timochiang.kitchen.services.UserService;
+import com.timochiang.kitchen.utils.dto.UserIngredientDto;
+import com.timochiang.kitchen.utils.json.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -47,21 +49,19 @@ public class UserController {
 
     @PostMapping("/ingredient/receipt")
     public String createIngredientFromReceipt(@RequestParam("receipt_image") MultipartFile file, RedirectAttributes redirectAttributes) {
-        Product[] ingredients;
+        List<Product> ingredients = new ArrayList<>();
         String errorMessage = "";
         try {
             ingredients = userService.uploadReceipt(file);
-            if (ingredients.length == 0) {
+            if (ingredients.size() == 0) {
                 errorMessage = "スキャンの結果はゼロです。";
             }
             for(Product p : ingredients) {
                 System.out.println(p.getName());
             }
         } catch (IllegalArgumentException e) {
-            ingredients = new Product[0];
             errorMessage = "写真が取得できませんでした。";
         } catch (IOException | ResourceAccessException e) {
-            ingredients = new Product[0];
             errorMessage = "スキャン機能はメンテナンス実施中。";
         }
 

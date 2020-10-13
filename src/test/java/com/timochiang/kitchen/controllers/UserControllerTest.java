@@ -4,16 +4,20 @@ import com.timochiang.kitchen.UserController;
 import com.timochiang.kitchen.entities.*;
 import com.timochiang.kitchen.services.CategoryService;
 import com.timochiang.kitchen.services.UserService;
+import com.timochiang.kitchen.utils.json.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +26,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -39,9 +44,10 @@ public class UserControllerTest {
     private final UserIngredient ui1 = new UserIngredient();
     private final Dish dish1 = new Dish();
     private List<Dish> dishes;
+    private MockMultipartFile file;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         Category c1 = new Category();
         c1.setId(1);
         c1.setName("cat1");
@@ -96,6 +102,9 @@ public class UserControllerTest {
         di2.setQuantity(3.0);
         di2.setUserIngredientId(ui2.getId());
         dish1.setIngredients(new ArrayList<>(Arrays.asList(di1, di2)));
+
+        FileInputStream inputStream = new FileInputStream("src/test/resources/files/test.jpg");
+        file = new MockMultipartFile("receipt_image", "test.jpg", "image/jpg", inputStream);
 
         // mock prepare
         Mockito.when(categoryService.findAll()).thenReturn(categories);
@@ -152,5 +161,47 @@ public class UserControllerTest {
         for (Dish d : dishes) {
             dishHistory.andExpect(content().string(containsString(d.getName())));
         }
+    }
+
+    @Test
+    public void ingredientFromReceipt() throws Exception {
+        mockMvc.perform(get("/user/ingredient/receipt"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("写真から食材を追加")));
+
+    }
+
+    @Test
+    public void createIngredientFromReceipt() throws Exception {
+        Product p1 = new Product();
+        p1.setName("test product 1");
+        p1.setQuantity(3);
+        p1.setPrice(100);
+        p1.setDiscount(0);
+        Product p2 = new Product();
+        p2.setName("test product 2");
+        p2.setQuantity(1);
+        p2.setPrice(1000);
+        p2.setDiscount(100);
+        List<Product> products = new ArrayList<>(Arrays.asList(p1, p2));
+
+        Mockito.when(userService.uploadReceipt(file)).thenReturn(products);
+
+        MockHttpServletRequestBuilder createIngredient = multipart("/user/ingredient/receipt")
+                .file(file);
+        mockMvc.perform(createIngredient)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/ingredient/receipt/confirm"));
+    }
+
+    @Test
+    public void createIngredientWithZeroItem() throws Exception {
+        List<Product> products = new ArrayList<>();
+        Mockito.when(userService.uploadReceipt(file)).thenReturn(products);
+        MockHttpServletRequestBuilder createIngredient = multipart("/user/ingredient/receipt")
+                .file(file);
+        mockMvc.perform(createIngredient)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/user/ingredient/receipt"));
     }
 }

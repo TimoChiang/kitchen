@@ -1,5 +1,6 @@
 package com.timochiang.kitchen.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timochiang.kitchen.entities.Dish;
 import com.timochiang.kitchen.entities.DishIngredient;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -32,8 +34,10 @@ public class UserService {
     private UserIngredientRepository userIngredientRepository;
     @Autowired
     private DishRepository dishRepository;
+    @Autowired
+    private RestTemplate restTemplate;
 
-    @Value("${OCR_URL}")
+    @Value("${OCR_URL:http://localhost}")
     private String ocrUrl;
 
     public Iterable<UserIngredient> findAllIngredient() {
@@ -88,19 +92,19 @@ public class UserService {
         i.setCategory(a.getCategory());
     }
 
-    public Product[] uploadReceipt(MultipartFile file) throws IOException {
+    public List<Product> uploadReceipt(MultipartFile file) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("image", new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename()));
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity(new URL(ocrUrl + "/scan").toString(), requestEntity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(new URL(ocrUrl).toString(), requestEntity, String.class);
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(response.getBody(), Product[].class);
+
+        return mapper.readValue(response.getBody(), new TypeReference<>(){});
     }
 
-    class MultipartInputStreamFileResource extends InputStreamResource {
+    static class MultipartInputStreamFileResource extends InputStreamResource {
 
         private final String filename;
 
