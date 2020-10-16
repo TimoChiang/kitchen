@@ -2,17 +2,22 @@ package com.timochiang.kitchen;
 
 import com.timochiang.kitchen.entities.Category;
 import com.timochiang.kitchen.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CategoryController(@NonNull CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("")
     public String index(Model model) {

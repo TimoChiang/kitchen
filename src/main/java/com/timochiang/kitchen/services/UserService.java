@@ -5,16 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timochiang.kitchen.entities.Dish;
 import com.timochiang.kitchen.entities.DishIngredient;
 import com.timochiang.kitchen.entities.UserIngredient;
-import com.timochiang.kitchen.utils.json.Product;
 import com.timochiang.kitchen.repositories.DishRepository;
 import com.timochiang.kitchen.repositories.UserIngredientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.timochiang.kitchen.utils.json.Product;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -30,15 +30,18 @@ import java.util.List;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserIngredientRepository userIngredientRepository;
-    @Autowired
-    private DishRepository dishRepository;
-    @Autowired
-    private RestTemplate restTemplate;
+    private final UserIngredientRepository userIngredientRepository;
+    private final DishRepository dishRepository;
+    private final RestTemplate restTemplate;
 
     @Value("${OCR_URL:http://localhost}")
     private String ocrUrl;
+
+    public UserService(@NonNull UserIngredientRepository userIngredientRepository, @NonNull DishRepository dishRepository, @NonNull RestTemplate restTemplate) {
+        this.userIngredientRepository = userIngredientRepository;
+        this.dishRepository = dishRepository;
+        this.restTemplate = restTemplate;
+    }
 
     public Iterable<UserIngredient> findAllIngredient() {
         return userIngredientRepository.findAll();
