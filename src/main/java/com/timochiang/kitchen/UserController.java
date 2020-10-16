@@ -7,7 +7,7 @@ import com.timochiang.kitchen.services.CategoryService;
 import com.timochiang.kitchen.services.UserService;
 import com.timochiang.kitchen.utils.dto.UserIngredientDto;
 import com.timochiang.kitchen.utils.json.Product;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +22,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CategoryService categoryService;
+
+    private final UserService userService;
+    private final CategoryService categoryService;
+
+    public UserController(@NonNull UserService userService, @NonNull CategoryService categoryService) {
+        this.userService = userService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/ingredient")
     public String ingredient(Model model) {

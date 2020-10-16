@@ -5,5 +5,5 @@ import com.timochiang.kitchen.entities.Dish;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
-    public Category findFirstByParentOrderByOrderDesc(Category parent);
+    Category findFirstByParentOrderByOrderDesc(Category parent);
 }

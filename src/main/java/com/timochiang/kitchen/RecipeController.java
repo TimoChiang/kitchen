@@ -4,7 +4,7 @@ import com.timochiang.kitchen.entities.Recipe;
 import com.timochiang.kitchen.entities.Unit;
 import com.timochiang.kitchen.services.CategoryService;
 import com.timochiang.kitchen.services.RecipeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
-    @Autowired
-    private RecipeService recipeService;
-    @Autowired
-    private CategoryService categoryService;
+    private final RecipeService recipeService;
+    private final CategoryService categoryService;
+
+    public RecipeController(@NonNull RecipeService recipeService, @NonNull CategoryService categoryService) {
+        this.recipeService = recipeService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("")
     public String index(Model model, @RequestParam(defaultValue = "false") Boolean available) {

@@ -4,6 +4,7 @@ import com.timochiang.kitchen.entities.Recipe;
 import com.timochiang.kitchen.entities.RecipeIngredient;
 import com.timochiang.kitchen.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -11,8 +12,11 @@ import java.util.Iterator;
 
 @Service
 public class RecipeService {
-    @Autowired
-    private RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
+
+    public RecipeService(@NonNull RecipeRepository recipeRepository) {
+        this.recipeRepository = recipeRepository;
+    }
 
     public Iterable<Recipe> findAll() {
         return recipeRepository.findAll();
