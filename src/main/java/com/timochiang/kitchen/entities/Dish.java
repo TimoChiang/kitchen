@@ -1,6 +1,8 @@
 package com.timochiang.kitchen.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,8 +15,9 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Dish {
-
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -47,40 +50,6 @@ public class Dish {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dish")
     private List<DishIngredient> ingredients;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getScheduleDate() {
-        return scheduleDate;
-    }
-
-    public void setScheduleDate(String scheduleDate) {
-        this.scheduleDate = scheduleDate;
-    }
-
-    public String getScheduleTime() {
-        return scheduleTime;
-    }
-
-    public void setScheduleTime(String scheduleTime) {
-        this.scheduleTime = scheduleTime;
-    }
-
-    public Date getScheduleDateTime() { return scheduleDateTime; }
-
     public void setScheduleDateTime() {
         try {
             this.scheduleDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -89,10 +58,6 @@ public class Dish {
             e.printStackTrace();
             System.out.print("日程フォーマットが間違っている。");
         }
-    }
-
-    public List<DishIngredient> getIngredients() {
-        return ingredients;
     }
 
     public void setIngredients(List<DishIngredient> ingredients) {

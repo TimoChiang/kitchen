@@ -7,6 +7,7 @@ import com.timochiang.kitchen.services.CategoryService;
 import com.timochiang.kitchen.services.UserService;
 import com.timochiang.kitchen.utils.dto.UserIngredientDto;
 import com.timochiang.kitchen.utils.json.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -60,8 +62,9 @@ public class UserController {
             if (ingredients.size() == 0) {
                 errorMessage = "スキャンの結果はゼロです。";
             }
+
             for(Product p : ingredients) {
-                System.out.println(p.getName());
+                log.info(p.getName());
             }
         } catch (IllegalArgumentException e) {
             errorMessage = "写真が取得できませんでした。";
