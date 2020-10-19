@@ -1,5 +1,7 @@
 package com.timochiang.kitchen.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
@@ -11,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Category {
     @Id
     @GeneratedValue
@@ -46,22 +50,6 @@ public class Category {
     @Where(clause = "quantity > 0")
     private List<UserIngredient> userIngredients;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<Category> getChildren() {
         if (!isRemovedNullOfChildren) {
             // category will not be too huge
@@ -69,29 +57,5 @@ public class Category {
             this.isRemovedNullOfChildren = true;
         }
         return children;
-    }
-
-    public Category getParent() {
-        return parent;
-    }
-
-    public void setParent(Category parent) {
-        this.parent = parent;
-    }
-
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    public List<UserIngredient> getUserIngredients() {
-        return userIngredients;
-    }
-
-    public void setUserIngredients(List<UserIngredient> userIngredients) {
-        this.userIngredients = userIngredients;
     }
 }
