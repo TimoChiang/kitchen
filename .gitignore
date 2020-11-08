@@ -34,3 +34,5 @@ out/
 .vscode/
 
 db-data/
+terraform.tfstate*
+.terraform
