@@ -14,6 +14,10 @@ configurations {
     }
 }
 
+bootJar {
+    archiveFileName = 'kitchen-0.1.0.jar'
+}
+
 repositories {
     mavenCentral()
 }

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchen-gke-deployment
+spec:
+  selector:
+    matchLabels:
+      app: kitchen
+  template:
+    metadata:
+      labels:
+        app: kitchen
+    spec:
+      serviceAccountName:
+      containers:
+        - name: kitchen-app
+          image: ${KITCHEN_APP_IMAGE} # replace to the build image
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          env:
+            - name: MYSQL_HOST
+              value: ${CLOUD_PRIVATE_IP} # replace to the cloud sql's private ip
+            - name: MYSQL_PORT
+              value: "3306"

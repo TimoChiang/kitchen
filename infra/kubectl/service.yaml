@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kitchen-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: kitchen
+  ports:
+    - port: 80
+      targetPort: 8080
